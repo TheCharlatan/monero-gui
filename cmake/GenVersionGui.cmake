@@ -25,26 +25,40 @@
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# 
+# Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
 
-if (NOT CMAKE_HOST_WIN32)
-  set (CMAKE_SYSTEM_NAME Windows)
+# Check what commit we're on
+execute_process(COMMAND "${GIT}" rev-parse --short=9 HEAD RESULT_VARIABLE RET OUTPUT_VARIABLE COMMIT OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if(RET)
+	# Something went wrong, set the version tag to -unknown
+	
+    message(WARNING "Cannot determine current commit. Make sure that you are building either from a Git working tree or from a source archive.")
+    set(VERSIONTAG "unknown")
+    configure_file("src/version.js.in" "${TO}")
+else()
+	string(SUBSTRING ${COMMIT} 0 9 COMMIT)
+	message(STATUS "You are currently on commit ${COMMIT}")
+	
+	# Get all the tags
+	execute_process(COMMAND "${GIT}" rev-list --tags --max-count=1 --abbrev-commit RESULT_VARIABLE RET OUTPUT_VARIABLE TAGGEDCOMMIT OUTPUT_STRIP_TRAILING_WHITESPACE)
+	
+    if(NOT TAGGEDCOMMIT)
+        message(WARNING "Cannot determine most recent tag. Make sure that you are building either from a Git working tree or from a source archive.")
+        set(VERSIONTAG "${COMMIT}")
+    else()
+        message(STATUS "The most recent tag was at ${TAGGEDCOMMIT}")
+        
+        # Check if we're building that tagged commit or a different one
+        if(COMMIT STREQUAL TAGGEDCOMMIT)
+            message(STATUS "You are building a tagged release")
+            set(VERSIONTAG "release")
+        else()
+            message(STATUS "You are ahead of or behind a tagged release")
+            set(VERSIONTAG "${COMMIT}")
+        endif()
+    endif()	    
+
+    configure_file("src/version.js.in" "${TO}")
 endif()
-
-set (GCC_PREFIX i686-w64-mingw32)
-set (CMAKE_C_COMPILER ${GCC_PREFIX}-gcc)
-set (CMAKE_CXX_COMPILER ${GCC_PREFIX}-g++)
-set (CMAKE_AR ar CACHE FILEPATH "" FORCE)
-set (CMAKE_NM nm CACHE FILEPATH "" FORCE)
-set (CMAKE_LINKER ld CACHE FILEPATH "" FORCE)
-#set (CMAKE_RANLIB ${GCC_PREFIX}-gcc-ranlib CACHE FILEPATH "" FORCE)
-set (CMAKE_RC_COMPILER windres)
-
-set (CMAKE_FIND_ROOT_PATH "${MSYS2_FOLDER}/mingw32")
-
-# Ensure cmake doesn't find things in the wrong places
-set (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER) # Find programs on host
-set (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY) # Find libs in target
-set (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY) # Find includes in target
-
-set (MINGW_FLAG "-m32")
-set (USE_LTO_DEFAULT false)

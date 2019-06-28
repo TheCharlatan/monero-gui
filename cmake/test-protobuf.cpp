@@ -26,9 +26,18 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <assert.h>
+#include <string>
+#include <iostream>
+#include <google/protobuf/message.h>
+#include <google/protobuf/unknown_field_set.h>
+#include "test-protobuf.pb.h"
 
-static_assert(1, "FAIL");
 int main(int argc, char *argv[]) {
-	return 0;
+  google::protobuf::UnknownFieldSet ufs;
+  ufs.ClearAndFreeMemory();
+
+  Success sc;
+  sc.set_message("test");
+  sc.SerializeToOstream(&std::cerr);
+  return 0;
 }
