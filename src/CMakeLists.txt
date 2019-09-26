@@ -140,7 +140,12 @@ target_link_libraries(monero-gui
         #/usr/lib/x86_64-linux-gnu/libXau.a 
         #/usr/lib/x86_64-linux-gnu/libxcb.a
         #/usr/lib/x86_64-linux-gnu/libX11.a
+        ${OPENGL_gl_LIBRARY}
+        #${XRANDR_LIBRARIES}
         ${X11_LIBRARIES}
+        #/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0
+        #${OPENGL_LIBRARY}
+        pthread dl Xt xcb X11
         ${Boost_LIBRARIES}
 		${OPENSSL_LIBRARIES}
         ${CMAKE_DL_LIBS}

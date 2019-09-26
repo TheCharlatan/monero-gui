@@ -124,6 +124,34 @@ find_package(Qt5Svg REQUIRED)
 #message(STATUS "OpenGL: include dir at ${OPENGL_INCLUDE_DIR}")
 #message(STATUS "OpenGL: libraries at ${OPENGL_LIBRARIES}")
 
+#set(PROJECT_NAME monero-gui)
+
+# OpenGL
+find_package(OpenGL REQUIRED)
+if(OPENGL_FOUND)
+    list(APPEND INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
+    #target_link_libraries(${PROJECT_NAME} ${OPENGL_gl_LIBRARY})
+endif(OPENGL_FOUND)
+
+# XrandR
+#find_package(XRandR REQUIRED)
+#if(XRANDR_FOUND)
+#    list(APPEND INCLUDE_DIRS ${XRANDR_INCLUDE_DIRS})
+#    #target_link_libraries(${PROJECT_NAME} ${XRANDR_LIBRARIES})
+#endif(XRANDR_FOUND)
+
+# X11
+find_package(X11 REQUIRED)
+if (X11_FOUND)
+    list (APPEND INCLUDE_DIRS ${X11_INCLUDE_DIR})
+    #target_link_libraries(${PROJECT_NAME} ${X11_LIBRARIES})
+endif(X11_FOUND)
+
+# Pthread, Dl, Xaw, Xm, Xt, X11
+# Required by static Ogre3D version
+#####target_link_libraries(${PROJECT_NAME} pthread dl Xaw Xm Xt X11)
+
+
 # OpenSSL
 find_package(OpenSSL REQUIRED)
 #target_include_directories(monero-gui PUBLIC ${OPENSSL_INCLUDE_DIR})
@@ -188,8 +216,12 @@ find_package(X11 REQUIRED)
 message(STATUS "X11_FOUND = ${X11_FOUND}")
 message(STATUS "X11_INCLUDE_DIR = ${X11_INCLUDE_DIR}")
 message(STATUS "X11_LIBRARIES = ${X11_LIBRARIES}")
-#include_directories(${X11_INCLUDE_DIR})
-#link_directories(${X11_LIBRARIES})
+include_directories(${X11_INCLUDE_DIR})
+link_directories(${X11_LIBRARIES})
+if(STATIC)
+find_library(XCB_LIBRARY xcb)
+message(STATUS "Found xcb library: ${XCB_LIBRARY}")
+endif()
 endif()
 
 #target_include_directories(monero-gui PUBLIC ${Boost_INCLUDE_DIRS})
