@@ -28,7 +28,7 @@
 
 function (write_static_version_header hash)
   set(VERSIONTAG "${hash}")
-  configure_file("${CMAKE_SOURCE_DIR}/version.js.in" "${CMAKE_BINARY_DIR}/version.js")
+  configure_file("${CMAKE_SOURCE_DIR}/version.js.in" "${CMAKE_SOURCE_DIR}/version.js")
 endfunction ()
 
 find_package(Git QUIET)
@@ -38,10 +38,10 @@ if ("$Format:$" STREQUAL "")
 elseif (GIT_FOUND OR Git_FOUND)
   message(STATUS "Found Git: ${GIT_EXECUTABLE}")
   add_custom_command(
-    OUTPUT            "${CMAKE_BINARY_DIR}/version.js"
+    OUTPUT            "${CMAKE_SOURCE_DIR}/version.js"
     COMMAND           "${CMAKE_COMMAND}"
                       "-D" "GIT=${GIT_EXECUTABLE}"
-                      "-D" "TO=${CMAKE_BINARY_DIR}/version.js"
+                      "-D" "TO=${CMAKE_SOURCE_DIR}/version.js"
                       "-P" "cmake/GenVersionGui.cmake"
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 else()
@@ -49,4 +49,4 @@ else()
   write_static_version_header("unknown")
 endif ()
 add_custom_target(genversiongui ALL
-  DEPENDS "${CMAKE_BINARY_DIR}/version.js")
+    DEPENDS "${CMAKE_SOURCE_DIR}/version.js")

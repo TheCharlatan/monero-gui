@@ -107,7 +107,6 @@ file(GLOB_RECURSE SRC_HEADERS *.h)
 target_include_directories(monero-gui PUBLIC
 	${CMAKE_SOURCE_DIR}/monero/include
     ${CMAKE_SOURCE_DIR}/monero/src
-    #${CMAKE_SOURCE_DIR}/monero
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/daemon
 	${CMAKE_CURRENT_SOURCE_DIR}/libwalletqt
@@ -115,7 +114,6 @@ target_include_directories(monero-gui PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/QR-Code-generator
 	#${CMAKE_CURRENT_SOURCE_DIR}/QR-Code-scanner
 	${CMAKE_CURRENT_SOURCE_DIR}/daemon/zxcvbn-c
-    #${CMAKE_CURRENT_SOURCE_DIR}/monero/external/easylogging++/easylogging++.h    
     ${LibUSB_INCLUDE_DIRS}
     ${X11_INCLUDE_DIR}
 )
@@ -130,25 +128,19 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++0x")
 
 target_link_libraries(monero-gui
-        #${CMAKE_SOURCE_DIR}/monero/build/release/external/easylogging++/libeasylogging.a
-        #${CMAKE_SOURCE_DIR}/monero/lib/libeasylogging.a
         ${CMAKE_BINARY_DIR}/lib/libwallet_merged.a
         #${ZBAR_LIBRARIE}  QR
 	    ${CMAKE_BINARY_DIR}/monero/external/db_drivers/liblmdb/liblmdb.a
-		#${CMAKE_SOURCE_DIR}/monero/lib/libepee.a
         ${CMAKE_SOURCE_DIR}/build/monero/contrib/epee/src/libepee.a
-		${CMAKE_SOURCE_DIR}/monero/lib/libepee_readline.a
         ${CMAKE_BINARY_DIR}/monero/external/unbound/libunbound.a
         ${SODIUM_LIBRARY}
-        ${CMAKE_SOURCE_DIR}/monero/build/release/external/easylogging++/libeasylogging.a
-        #${CMAKE_SOURCE_DIR}/monero/lib/libeasylogging.a
-        #/usr/lib/x86_64-linux-gnu/libXau.a 
-        #/usr/lib/x86_64-linux-gnu/libxcb.a
-        #/usr/lib/x86_64-linux-gnu/libX11.a
-        ${OPENGL_gl_LIBRARY}
+        ${CMAKE_SOURCE_DIR}/build/monero/external/easylogging++/libeasylogging.a
+        ${CMAKE_SOURCE_DIR}/build/monero/src/blockchain_db/libblockchain_db.a
+        ${CMAKE_SOURCE_DIR}/build/monero/external/randomx/librandomx.a
+        ${CMAKE_SOURCE_DIR}/build/monero/src/hardforks/libhardforks.a
+        #${OPENGL_gl_LIBRARY}
         #${XRANDR_LIBRARIES}
         ${X11_LIBRARIES}
-        #/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0
         #${OPENGL_LIBRARY}
         pthread dl Xt xcb X11
         ${Boost_LIBRARIES}

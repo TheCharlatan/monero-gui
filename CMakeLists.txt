@@ -127,11 +127,11 @@ find_package(Qt5Svg REQUIRED)
 #set(PROJECT_NAME monero-gui)
 
 # OpenGL
-find_package(OpenGL REQUIRED)
-if(OPENGL_FOUND)
-    list(APPEND INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
-    #target_link_libraries(${PROJECT_NAME} ${OPENGL_gl_LIBRARY})
-endif(OPENGL_FOUND)
+#find_package(OpenGL REQUIRED)
+#if(OPENGL_FOUND)
+#    list(APPEND INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
+#    #target_link_libraries(${PROJECT_NAME} ${OPENGL_gl_LIBRARY})
+#endif(OPENGL_FOUND)
 
 # XrandR
 #find_package(XRandR REQUIRED)
