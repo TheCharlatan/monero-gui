@@ -42,8 +42,8 @@ add_subdirectory(monero)
 #add_custom_target(monero COMMAND echo "monero already built")
 #execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/get_libwallet_api.sh WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 #ExternalProject_Add(SOURCE_DIR monero)
-#set_property(TARGET monero PROPERTY FOLDER "monero")
-add_library(MONERO_WALLET_LIBRARY STATIC monero)
+set_property(TARGET wallet_merged PROPERTY FOLDER "monero")
+#add_library(MONERO_WALLET_LIBRARY STATIC monero)
 #set(MONERO_WALLET_LIBRARY "${CMAKE_BINARY_DIR}/monero/lib/libwallet_merged.a")
 #set(MONERO_WALLET_HEADERS "${CMAKE_SOURCE_DIR}/monero/src")
 
@@ -97,6 +97,26 @@ endfunction ()
 function (monero_gui_add_library name)
     monero_gui_add_library_with_deps(NAME "${name}" SOURCES ${ARGN})
 endfunction()
+
+include_directories(${EASYLOGGING_INCLUDE})
+link_directories(${EASYLOGGING_LIBRARY_DIRS})
+
+# Final setup for liblmdb
+include_directories(${LMDB_INCLUDE})
+
+#${CMAKE_BINARY_DIR}/monero/external/db_drivers/liblmdb/liblmdb.a
+#        ${CMAKE_SOURCE_DIR}/build/monero/contrib/epee/src/libepee.a
+#        ${CMAKE_BINARY_DIR}/monero/external/unbound/libunbound.a
+#        ${SODIUM_LIBRARY}
+#        ${CMAKE_SOURCE_DIR}/build/monero/external/easylogging++/libeasylogging.a
+#        ${CMAKE_SOURCE_DIR}/build/monero/src/blockchain_db/libblockchain_db.a
+#        ${CMAKE_SOURCE_DIR}/build/monero/external/randomx/librandomx.a
+#        ${CMAKE_SOURCE_DIR}/build/monero/src/hardforks/libhardforks.a
+
+# Final setup for libunwind
+include_directories(${LIBUNWIND_INCLUDE})
+link_directories(${LIBUNWIND_LIBRARY_DIRS})
+
 
 include(VersionGui)
 #set_property(SOURCE version.h PROPERTY SKIP_AUTOMOC ON)
@@ -229,4 +249,7 @@ message(STATUS "Using Boost include dir at ${Boost_INCLUDE_DIRS}")
 message(STATUS "Using Boost libraries at ${Boost_LIBRARIES}")
 
 add_subdirectory(src)
+
+add_dependencies(monero-gui wallet_merged)
+
 

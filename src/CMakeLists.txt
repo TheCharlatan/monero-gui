@@ -130,14 +130,16 @@ set(CMAKE_CXX_FLAGS "-std=c++0x")
 target_link_libraries(monero-gui
         ${CMAKE_BINARY_DIR}/lib/libwallet_merged.a
         #${ZBAR_LIBRARIE}  QR
-	    ${CMAKE_BINARY_DIR}/monero/external/db_drivers/liblmdb/liblmdb.a
-        ${CMAKE_SOURCE_DIR}/build/monero/contrib/epee/src/libepee.a
+        ${LMDB_LIBRARY}
+        #${CMAKE_BINARY_DIR}/monero/external/db_drivers/liblmdb/liblmdb.a
+        ${CMAKE_BINARY_DIR}/monero/contrib/epee/src/libepee.a
         ${CMAKE_BINARY_DIR}/monero/external/unbound/libunbound.a
+        #${UNBOUND_LIBRARY}
         ${SODIUM_LIBRARY}
-        ${CMAKE_SOURCE_DIR}/build/monero/external/easylogging++/libeasylogging.a
-        ${CMAKE_SOURCE_DIR}/build/monero/src/blockchain_db/libblockchain_db.a
-        ${CMAKE_SOURCE_DIR}/build/monero/external/randomx/librandomx.a
-        ${CMAKE_SOURCE_DIR}/build/monero/src/hardforks/libhardforks.a
+        ${CMAKE_BINARY_DIR}/monero/external/easylogging++/libeasylogging.a
+        ${CMAKE_BINARY_DIR}/monero/src/blockchain_db/libblockchain_db.a
+        ${CMAKE_BINARY_DIR}/monero/external/randomx/librandomx.a
+        ${CMAKE_BINARY_DIR}/monero/src/hardforks/libhardforks.a
         #${OPENGL_gl_LIBRARY}
         #${XRANDR_LIBRARIES}
         ${X11_LIBRARIES}
