@@ -77,6 +77,7 @@ add_executable(monero-gui ${EXECUTABLE_FLAG} main/main.cpp
     ${QR_CODE_FILES}
     ${QML_QRC}
 )
+set_property(TARGET monero-gui PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 # OpenGL
 target_include_directories(monero-gui PUBLIC ${OPENGL_INCLUDE_DIR})
