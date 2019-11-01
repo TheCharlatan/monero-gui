@@ -1,6 +1,7 @@
 #ifndef FUTURE_SCHEDULER_H
 #define FUTURE_SCHEDULER_H
 
+#include <atomic>
 #include <functional>
 
 #include <QtConcurrent/QtConcurrent>
@@ -10,6 +11,7 @@
 #include <QMutexLocker>
 #include <QPair>
 #include <QWaitCondition>
+#include <QDebug>
 
 class FutureScheduler : public QObject
 {
@@ -25,7 +27,7 @@ public:
     QPair<bool, QFuture<QJSValueList>> run(std::function<QJSValueList() noexcept> function, const QJSValue &callback);
 
 private:
-    bool add() noexcept;
+    size_t add() noexcept;
     void done() noexcept;
 
     template<typename T>
@@ -43,14 +45,15 @@ private:
     }
 
     template<typename T>
-    QPair<bool, QFuture<T>> execute(std::function<QFuture<T>(QFutureWatcher<T> *)> makeFuture) noexcept
+    QPair<bool, QFuture<T>> execute(std::function<QFuture<T>(QFutureWatcher<T> *, size_t)> makeFuture) noexcept
     {
-        if (add())
+        size_t id = add();
+        if (id != 0)
         {
             try
             {
                 auto *watcher = newWatcher<T>();
-                watcher->setFuture(makeFuture(watcher));
+                watcher->setFuture(makeFuture(watcher, id));
                 connect(watcher, &QFutureWatcher<T>::finished, [this, watcher] {
                     watcher->deleteLater();
                 });
@@ -74,6 +77,7 @@ private:
     QWaitCondition Condition;
     QMutex Mutex;
     bool Stopping;
+    std::atomic<std::size_t> Id;
 };
 
 #endif // FUTURE_SCHEDULER_H

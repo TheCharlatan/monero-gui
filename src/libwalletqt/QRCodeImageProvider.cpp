@@ -29,9 +29,11 @@
 #include "QrCode.hpp"
 
 #include "QRCodeImageProvider.h"
+#include <QDebug>
 
 QImage QRCodeImageProvider::genQrImage(const QString &id, QSize *size)
 {
+qCritical() << "QImage QRCodeImageProvider::genQrImage";
   using namespace qrcodegen;
 
   QrCode qrcode = QrCode::encodeText(id.toStdString().c_str(), QrCode::Ecc::MEDIUM);
@@ -55,5 +57,6 @@ QImage QRCodeImageProvider::genQrImage(const QString &id, QSize *size)
 
 QImage QRCodeImageProvider::requestImage(const QString &id, QSize *size, const QSize &/* requestedSize */)
 {
+qCritical() << "QImage QRCodeImageProvider::requestImage";
   return genQrImage(id, size);
 }

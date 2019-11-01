@@ -104,6 +104,7 @@ QList<TransactionInfo *> TransactionHistory::getAll(quint32 accountIndex) const
 
 void TransactionHistory::refresh(quint32 accountIndex)
 {
+qCritical() << "void TransactionHistory::refresh";
     // rebuilding transaction list in wallet_api;
     m_pimpl->refresh();
     // copying list here and keep track on every item to avoid memleaks
@@ -112,26 +113,31 @@ void TransactionHistory::refresh(quint32 accountIndex)
 
 quint64 TransactionHistory::count() const
 {
+qCritical() << "quint64 TransactionHistory::count";
     return m_tinfo.count();
 }
 
 QDateTime TransactionHistory::firstDateTime() const
 {
+qCritical() << "QDateTime TransactionHistory::firstDateTime";
     return m_firstDateTime;
 }
 
 QDateTime TransactionHistory::lastDateTime() const
 {
+qCritical() << "QDateTime TransactionHistory::lastDateTime";
     return m_lastDateTime;
 }
 
 quint64 TransactionHistory::minutesToUnlock() const
 {
+qCritical() << "quint64 TransactionHistory::minutesToUnlock";
     return m_minutesToUnlock;
 }
 
 bool TransactionHistory::TransactionHistory::locked() const
 {
+qCritical() << "bool TransactionHistory::TransactionHistory::locked";
     return m_locked;
 }
 
@@ -145,6 +151,7 @@ TransactionHistory::TransactionHistory(Monero::TransactionHistory *pimpl, QObjec
 
 QString TransactionHistory::writeCSV(quint32 accountIndex, QString out)
 {
+qCritical() << "QString TransactionHistory::writeCSV";
     QList<TransactionInfo *> history = this->getAll(accountIndex);
     if(history.count() < 1){
         return QString("");

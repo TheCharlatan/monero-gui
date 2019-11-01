@@ -23,8 +23,9 @@ void FutureScheduler::shutdownWaitForFinished() noexcept
 
 QPair<bool, QFuture<void>> FutureScheduler::run(std::function<void()> function) noexcept
 {
-    return execute<void>([this, function](QFutureWatcher<void> *) {
-        return QtConcurrent::run([this, function] {
+    return execute<void>([this, function](QFutureWatcher<void> *, size_t id) {
+        return QtConcurrent::run([this, function, id] {
+            qCritical() << "FutureScheduler::run QtConcurrent::run " << id;
             try
             {
                 function();
@@ -34,6 +35,7 @@ QPair<bool, QFuture<void>> FutureScheduler::run(std::function<void()> function) 
                 qWarning() << "Exception thrown from async function: " << exception.what();
             }
             done();
+            qCritical() << "FutureScheduler::run done " << id;
         });
     });
 }
@@ -45,11 +47,14 @@ QPair<bool, QFuture<QJSValueList>> FutureScheduler::run(std::function<QJSValueLi
         throw std::runtime_error("js callback must be callable");
     }
 
-    return execute<QJSValueList>([this, function, callback](QFutureWatcher<QJSValueList> *watcher) {
-        connect(watcher, &QFutureWatcher<QJSValueList>::finished, [watcher, callback] {
+    return execute<QJSValueList>([this, function, callback](QFutureWatcher<QJSValueList> *watcher, size_t id) {
+        connect(watcher, &QFutureWatcher<QJSValueList>::finished, [watcher, callback, id] {
+            qCritical() << "invoking callback " << id;
             QJSValue(callback).call(watcher->future().result());
+            qCritical() << "invoking callback done " << id;
         });
-        return QtConcurrent::run([this, function] {
+        return QtConcurrent::run([this, function, id] {
+            qCritical() << "FutureScheduler::run callback QtConcurrent::run " << id;
             QJSValueList result;
             try
             {
@@ -60,22 +65,25 @@ QPair<bool, QFuture<QJSValueList>> FutureScheduler::run(std::function<QJSValueLi
                 qWarning() << "Exception thrown from async function: " << exception.what();
             }
             done();
+            qCritical() << "FutureScheduler::run callback done " << id;
             return result;
         });
     });
 }
 
-bool FutureScheduler::add() noexcept
+size_t FutureScheduler::add() noexcept
 {
     QMutexLocker locker(&Mutex);
 
+    Id++;
+
     if (Stopping)
     {
-        return false;
+        return 0;
     }
 
     ++Alive;
-    return true;
+    return Id;
 }
 
 void FutureScheduler::done() noexcept

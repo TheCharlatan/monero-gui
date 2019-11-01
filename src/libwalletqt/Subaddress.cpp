@@ -62,23 +62,27 @@ Monero::SubaddressRow * Subaddress::getRow(int index) const
 
 void Subaddress::addRow(quint32 accountIndex, const QString &label) const
 {
+qCritical() << "void Subaddress::addRow";
     m_subaddressImpl->addRow(accountIndex, label.toStdString());
     getAll(true);
 }
 
 void Subaddress::setLabel(quint32 accountIndex, quint32 addressIndex, const QString &label) const
 {
+qCritical() << "void Subaddress::setLabel";
     m_subaddressImpl->setLabel(accountIndex, addressIndex, label.toStdString());
     getAll(true);
 }
 
 void Subaddress::refresh(quint32 accountIndex) const
 {
+qCritical() << "void Subaddress::refresh";
     m_subaddressImpl->refresh(accountIndex);
     getAll(true);
 }
 
 quint64 Subaddress::count() const
 {
+qCritical() << "quint64 Subaddress::count";
     return m_rows.size();
 }

@@ -38,11 +38,13 @@ AddressBook::AddressBook(Monero::AddressBook *abImpl,QObject *parent)
 
 QString AddressBook::errorString() const
 {
+qCritical() << "QString AddressBook::errorString";
     return QString::fromStdString(m_addressBookImpl->errorString());
 }
 
 int AddressBook::errorCode() const
 {
+qCritical() << "int AddressBook::errorCode";
     return m_addressBookImpl->errorCode();
 }
 
@@ -73,6 +75,7 @@ Monero::AddressBookRow * AddressBook::getRow(int index) const
 
 bool AddressBook::addRow(const QString &address, const QString &payment_id, const QString &description) const
 {
+qCritical() << "bool AddressBook::addRow";
     //  virtual bool addRow(const std::string &dst_addr , const std::string &payment_id, const std::string &description) = 0;
     bool r = m_addressBookImpl->addRow(address.toStdString(), payment_id.toStdString(), description.toStdString());
 
@@ -84,6 +87,7 @@ bool AddressBook::addRow(const QString &address, const QString &payment_id, cons
 
 bool AddressBook::deleteRow(int rowId) const
 {
+qCritical() << "bool AddressBook::deleteRow";
     bool r = m_addressBookImpl->deleteRow(rowId);
 
     // Fetch new data from wallet2.
@@ -94,10 +98,12 @@ bool AddressBook::deleteRow(int rowId) const
 
 quint64 AddressBook::count() const
 {
+qCritical() << "quint64 AddressBook::count";
     return m_rows.size();
 }
 
 int AddressBook::lookupPaymentID(const QString &payment_id) const
 {
+qCritical() << "int AddressBook::lookupPaymentID";
     return m_addressBookImpl->lookupPaymentID(payment_id.toStdString());
 }

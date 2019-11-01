@@ -27,20 +27,23 @@
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "PendingTransaction.h"
-
+#include <QDebug>
 
 PendingTransaction::Status PendingTransaction::status() const
 {
+qCritical() << "Status PendingTransaction::status";
     return static_cast<Status>(m_pimpl->status());
 }
 
 QString PendingTransaction::errorString() const
 {
+qCritical() << "QString PendingTransaction::errorString";
     return QString::fromStdString(m_pimpl->errorString());
 }
 
 bool PendingTransaction::commit()
 {
+qCritical() << "bool PendingTransaction::commit";
     // Save transaction to file if fileName is set.
     if(!m_fileName.isEmpty())
         return m_pimpl->commit(m_fileName.toStdString());
@@ -49,22 +52,26 @@ bool PendingTransaction::commit()
 
 quint64 PendingTransaction::amount() const
 {
+qCritical() << "quint64 PendingTransaction::amount";
     return m_pimpl->amount();
 }
 
 quint64 PendingTransaction::dust() const
 {
+qCritical() << "quint64 PendingTransaction::dust";
     return m_pimpl->dust();
 }
 
 quint64 PendingTransaction::fee() const
 {
+qCritical() << "quint64 PendingTransaction::fee";
     return m_pimpl->fee();
 }
 
 
 QStringList PendingTransaction::txid() const
 {
+qCritical() << "QStringList PendingTransaction::txid";
     QStringList list;
     std::vector<std::string> txid = m_pimpl->txid();
     for (const auto &t: txid)
@@ -75,6 +82,7 @@ QStringList PendingTransaction::txid() const
 
 quint64 PendingTransaction::txCount() const
 {
+qCritical() << "quint64 PendingTransaction::txCount";
     return m_pimpl->txCount();
 }
 
@@ -90,6 +98,7 @@ QList<QVariant> PendingTransaction::subaddrIndices() const
 
 void PendingTransaction::setFilename(const QString &fileName)
 {
+qCritical() << "void PendingTransaction::setFilename";
     m_fileName = fileName;
 }
 

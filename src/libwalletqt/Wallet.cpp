@@ -124,33 +124,40 @@ Wallet::Wallet(QObject * parent)
 
 QString Wallet::getSeed() const
 {
+qCritical() << "QString Wallet::getSeed";
     return QString::fromStdString(m_walletImpl->seed());
 }
 
 QString Wallet::getSeedLanguage() const
 {
+qCritical() << "QString Wallet::getSeedLanguage";
     return QString::fromStdString(m_walletImpl->getSeedLanguage());
 }
 
 void Wallet::setSeedLanguage(const QString &lang)
 {
+qCritical() << "void Wallet::setSeedLanguage";
     m_walletImpl->setSeedLanguage(lang.toStdString());
 }
 
 Wallet::Status Wallet::status() const
 {
+qCritical() << "Status Wallet::status";
     return static_cast<Status>(m_walletImpl->status());
 }
 
 NetworkType::Type Wallet::nettype() const
 {
+qCritical() << "Type Wallet::nettype";
     return static_cast<NetworkType::Type>(m_walletImpl->nettype());
 }
 
 
 void Wallet::updateConnectionStatusAsync()
 {
+qCritical() << "void Wallet::updateConnectionStatusAsync";
     m_scheduler.run([this] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         ConnectionStatus newStatus = static_cast<ConnectionStatus>(m_walletImpl->connected());
         if (newStatus != m_connectionStatus || !m_initialized) {
             m_initialized = true;
@@ -165,6 +172,7 @@ void Wallet::updateConnectionStatusAsync()
 
 Wallet::ConnectionStatus Wallet::connected(bool forceCheck)
 {
+qCritical() << "ConnectionStatus Wallet::connected";
     // cache connection status
     if (forceCheck || !m_initialized || (m_connectionStatusTime.elapsed() / 1000 > m_connectionStatusTtl && !m_connectionStatusRunning) || m_connectionStatusTime.elapsed() > 30000) {
         qDebug() << "Checking connection status";
@@ -178,36 +186,43 @@ Wallet::ConnectionStatus Wallet::connected(bool forceCheck)
 
 bool Wallet::synchronized() const
 {
+qCritical() << "bool Wallet::synchronized";
     return m_walletImpl->synchronized();
 }
 
 QString Wallet::errorString() const
 {
+qCritical() << "QString Wallet::errorString";
     return QString::fromStdString(m_walletImpl->errorString());
 }
 
 bool Wallet::setPassword(const QString &password)
 {
+qCritical() << "bool Wallet::setPassword";
     return m_walletImpl->setPassword(password.toStdString());
 }
 
 QString Wallet::address(quint32 accountIndex, quint32 addressIndex) const
 {
+qCritical() << "QString Wallet::address";
     return QString::fromStdString(m_walletImpl->address(accountIndex, addressIndex));
 }
 
 QString Wallet::path() const
 {
+qCritical() << "QString Wallet::path";
     return QString::fromStdString(m_walletImpl->path());
 }
 
 bool Wallet::store(const QString &path)
 {
+qCritical() << "bool Wallet::store";
     return m_walletImpl->store(path.toStdString());
 }
 
 bool Wallet::init(const QString &daemonAddress, bool trustedDaemon, quint64 upperTransactionLimit, bool isRecovering, bool isRecoveringFromDevice, quint64 restoreHeight)
 {
+qCritical() << "bool Wallet::init";
     qDebug() << "init non async";
     if (isRecovering){
         qDebug() << "RESTORING";
@@ -227,6 +242,7 @@ bool Wallet::init(const QString &daemonAddress, bool trustedDaemon, quint64 uppe
 
 void Wallet::setDaemonLogin(const QString &daemonUsername, const QString &daemonPassword)
 {
+qCritical() << "void Wallet::setDaemonLogin";
     // store daemon login
     m_daemonUsername = daemonUsername;
     m_daemonPassword = daemonPassword;
@@ -234,6 +250,7 @@ void Wallet::setDaemonLogin(const QString &daemonUsername, const QString &daemon
 
 void Wallet::initAsync(const QString &daemonAddress, bool trustedDaemon, quint64 upperTransactionLimit, bool isRecovering, bool isRecoveringFromDevice, quint64 restoreHeight)
 {
+qCritical() << "void Wallet::initAsync";
     qDebug() << "initAsync: " + daemonAddress;
     // Change status to disconnected if connected
     if(m_connectionStatus != Wallet::ConnectionStatus_Disconnected) {
@@ -242,6 +259,7 @@ void Wallet::initAsync(const QString &daemonAddress, bool trustedDaemon, quint64
     }
 
     m_scheduler.run([this, daemonAddress, trustedDaemon, upperTransactionLimit, isRecovering, isRecoveringFromDevice, restoreHeight] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         bool success = init(daemonAddress, trustedDaemon, upperTransactionLimit, isRecovering, isRecoveringFromDevice, restoreHeight);
         if (success)
         {
@@ -255,17 +273,20 @@ void Wallet::initAsync(const QString &daemonAddress, bool trustedDaemon, quint64
 
 bool Wallet::isHwBacked() const
 {
+qCritical() << "bool Wallet::isHwBacked";
     return m_walletImpl->getDeviceType() != Monero::Wallet::Device_Software;
 }
 
 bool Wallet::isLedger() const
 {
+qCritical() << "bool Wallet::isLedger";
     return m_walletImpl->getDeviceType() == Monero::Wallet::Device_Ledger;
 }
 
 //! create a view only wallet
 bool Wallet::createViewOnly(const QString &path, const QString &password) const
 {
+qCritical() << "bool Wallet::createViewOnly";
     // Create path
     QDir d = QFileInfo(path).absoluteDir();
     d.mkpath(d.absolutePath());
@@ -274,45 +295,54 @@ bool Wallet::createViewOnly(const QString &path, const QString &password) const
 
 bool Wallet::connectToDaemon()
 {
+qCritical() << "bool Wallet::connectToDaemon";
     return m_walletImpl->connectToDaemon();
 }
 
 void Wallet::setTrustedDaemon(bool arg)
 {
+qCritical() << "void Wallet::setTrustedDaemon";
     m_walletImpl->setTrustedDaemon(arg);
 }
 
 bool Wallet::viewOnly() const
 {
+qCritical() << "bool Wallet::viewOnly";
     return m_walletImpl->watchOnly();
 }
 
 quint64 Wallet::balance(quint32 accountIndex) const
 {
+qCritical() << "quint64 Wallet::balance";
     return m_walletImpl->balance(accountIndex);
 }
 
 quint64 Wallet::balanceAll() const
 {
+qCritical() << "quint64 Wallet::balanceAll";
     return m_walletImpl->balanceAll();
 }
 
 quint64 Wallet::unlockedBalance(quint32 accountIndex) const
 {
+qCritical() << "quint64 Wallet::unlockedBalance";
     return m_walletImpl->unlockedBalance(accountIndex);
 }
 
 quint64 Wallet::unlockedBalanceAll() const
 {
+qCritical() << "quint64 Wallet::unlockedBalanceAll";
     return m_walletImpl->unlockedBalanceAll();
 }
 
 quint32 Wallet::currentSubaddressAccount() const
 {
+qCritical() << "quint32 Wallet::currentSubaddressAccount";
     return m_currentSubaddressAccount;
 }
 void Wallet::switchSubaddressAccount(quint32 accountIndex)
 {
+qCritical() << "void Wallet::switchSubaddressAccount";
     if (accountIndex < numSubaddressAccounts())
     {
         m_currentSubaddressAccount = accountIndex;
@@ -322,32 +352,40 @@ void Wallet::switchSubaddressAccount(quint32 accountIndex)
 }
 void Wallet::addSubaddressAccount(const QString& label)
 {
+qCritical() << "void Wallet::addSubaddressAccount";
     m_walletImpl->addSubaddressAccount(label.toStdString());
     switchSubaddressAccount(numSubaddressAccounts() - 1);
 }
 quint32 Wallet::numSubaddressAccounts() const
 {
+qCritical() << "quint32 Wallet::numSubaddressAccounts";
     return m_walletImpl->numSubaddressAccounts();
 }
 quint32 Wallet::numSubaddresses(quint32 accountIndex) const
 {
+qCritical() << "quint32 Wallet::numSubaddresses";
     return m_walletImpl->numSubaddresses(accountIndex);
 }
 void Wallet::addSubaddress(const QString& label)
 {
+qCritical() << "void Wallet::addSubaddress";
     m_walletImpl->addSubaddress(currentSubaddressAccount(), label.toStdString());
 }
 QString Wallet::getSubaddressLabel(quint32 accountIndex, quint32 addressIndex) const
 {
+qCritical() << "QString Wallet::getSubaddressLabel";
     return QString::fromStdString(m_walletImpl->getSubaddressLabel(accountIndex, addressIndex));
 }
 void Wallet::setSubaddressLabel(quint32 accountIndex, quint32 addressIndex, const QString &label)
 {
+qCritical() << "void Wallet::setSubaddressLabel";
     m_walletImpl->setSubaddressLabel(accountIndex, addressIndex, label.toStdString());
 }
 void Wallet::deviceShowAddressAsync(quint32 accountIndex, quint32 addressIndex, const QString &paymentId)
 {
+qCritical() << "void Wallet::deviceShowAddressAsync";
     m_scheduler.run([this, accountIndex, addressIndex, paymentId] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         m_walletImpl->deviceShowAddress(accountIndex, addressIndex, paymentId.toStdString());
         emit deviceShowAddressShowed();
     });
@@ -355,9 +393,12 @@ void Wallet::deviceShowAddressAsync(quint32 accountIndex, quint32 addressIndex, 
 
 void Wallet::refreshHeightAsync()
 {
+qCritical() << "void Wallet::refreshHeightAsync";
     m_scheduler.run([this] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         quint64 daemonHeight;
         QPair<bool, QFuture<void>> daemonHeightFuture = m_scheduler.run([this, &daemonHeight] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
             daemonHeight = daemonBlockChainHeight();
         });
         if (!daemonHeightFuture.first)
@@ -367,6 +408,7 @@ void Wallet::refreshHeightAsync()
 
         quint64 targetHeight;
         QPair<bool, QFuture<void>> targetHeightFuture = m_scheduler.run([this, &targetHeight] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
             targetHeight = daemonBlockChainTargetHeight();
         });
         if (!targetHeightFuture.first)
@@ -384,11 +426,13 @@ void Wallet::refreshHeightAsync()
 
 quint64 Wallet::blockChainHeight() const
 {
+qCritical() << "quint64 Wallet::blockChainHeight";
     return m_walletImpl->blockChainHeight();
 }
 
 quint64 Wallet::daemonBlockChainHeight() const
 {
+qCritical() << "quint64 Wallet::daemonBlockChainHeight";
     // cache daemon blockchain height for some time (60 seconds by default)
 
     if (m_daemonBlockChainHeight == 0
@@ -401,6 +445,7 @@ quint64 Wallet::daemonBlockChainHeight() const
 
 quint64 Wallet::daemonBlockChainTargetHeight() const
 {
+qCritical() << "quint64 Wallet::daemonBlockChainTargetHeight";
     if (m_daemonBlockChainTargetHeight <= 1
             || m_daemonBlockChainTargetHeightTime.elapsed() / 1000 > m_daemonBlockChainTargetHeightTtl) {
         m_daemonBlockChainTargetHeight = m_walletImpl->daemonBlockChainTargetHeight();
@@ -418,16 +463,19 @@ quint64 Wallet::daemonBlockChainTargetHeight() const
 
 bool Wallet::exportKeyImages(const QString& path)
 {
+qCritical() << "bool Wallet::exportKeyImages";
     return m_walletImpl->exportKeyImages(path.toStdString());
 }
 
 bool Wallet::importKeyImages(const QString& path)
 {
+qCritical() << "bool Wallet::importKeyImages";
     return m_walletImpl->importKeyImages(path.toStdString());
 }
 
 bool Wallet::refresh()
 {
+qCritical() << "bool Wallet::refresh";
     bool result = m_walletImpl->refresh();
     m_history->refresh(currentSubaddressAccount());
     m_subaddress->refresh(currentSubaddressAccount());
@@ -439,27 +487,32 @@ bool Wallet::refresh()
 
 void Wallet::refreshAsync()
 {
+qCritical() << "void Wallet::refreshAsync";
     qDebug() << "refresh async";
     m_walletImpl->refreshAsync();
 }
 
 void Wallet::setAutoRefreshInterval(int seconds)
 {
+qCritical() << "void Wallet::setAutoRefreshInterval";
     m_walletImpl->setAutoRefreshInterval(seconds);
 }
 
 int Wallet::autoRefreshInterval() const
 {
+qCritical() << "int Wallet::autoRefreshInterval";
     return m_walletImpl->autoRefreshInterval();
 }
 
 void Wallet::startRefresh() const
 {
+qCritical() << "void Wallet::startRefresh";
     m_walletImpl->startRefresh();
 }
 
 void Wallet::pauseRefresh() const
 {
+qCritical() << "void Wallet::pauseRefresh";
     m_walletImpl->pauseRefresh();
 }
 
@@ -480,6 +533,7 @@ void Wallet::createTransactionAsync(const QString &dst_addr, const QString &paym
                                PendingTransaction::Priority priority)
 {
     m_scheduler.run([this, dst_addr, payment_id, amount, mixin_count, priority] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         PendingTransaction *tx = createTransaction(dst_addr, payment_id, amount, mixin_count, priority);
         emit transactionCreated(tx, dst_addr, payment_id, mixin_count);
     });
@@ -501,6 +555,7 @@ void Wallet::createTransactionAllAsync(const QString &dst_addr, const QString &p
                                PendingTransaction::Priority priority)
 {
     m_scheduler.run([this, dst_addr, payment_id, mixin_count, priority] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         PendingTransaction *tx = createTransactionAll(dst_addr, payment_id, mixin_count, priority);
         emit transactionCreated(tx, dst_addr, payment_id, mixin_count);
     });
@@ -515,7 +570,9 @@ PendingTransaction *Wallet::createSweepUnmixableTransaction()
 
 void Wallet::createSweepUnmixableTransactionAsync()
 {
+qCritical() << "void Wallet::createSweepUnmixableTransactionAsync";
     m_scheduler.run([this] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         PendingTransaction *tx = createSweepUnmixableTransaction();
         emit transactionCreated(tx, "", "", 0);
     });
@@ -531,6 +588,7 @@ UnsignedTransaction * Wallet::loadTxFile(const QString &fileName)
 
 bool Wallet::submitTxFile(const QString &fileName) const
 {
+qCritical() << "bool Wallet::submitTxFile";
     qDebug() << "Trying to submit " << fileName;
     if (!m_walletImpl->submitTransaction(fileName.toStdString()))
         return false;
@@ -540,7 +598,9 @@ bool Wallet::submitTxFile(const QString &fileName) const
 
 void Wallet::commitTransactionAsync(PendingTransaction *t)
 {
+qCritical() << "void Wallet::commitTransactionAsync";
     m_scheduler.run([this, t] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         auto txIdList = t->txid();  // retrieve before commit
         emit transactionCommitted(t->commit(), t, txIdList);
     });
@@ -548,12 +608,14 @@ void Wallet::commitTransactionAsync(PendingTransaction *t)
 
 void Wallet::disposeTransaction(PendingTransaction *t)
 {
+qCritical() << "void Wallet::disposeTransaction";
     m_walletImpl->disposeTransaction(t->m_pimpl);
     delete t;
 }
 
 void Wallet::disposeTransaction(UnsignedTransaction *t)
 {
+qCritical() << "void Wallet::disposeTransaction";
     delete t;
 }
 
@@ -622,21 +684,25 @@ SubaddressAccountModel *Wallet::subaddressAccountModel() const
 
 QString Wallet::generatePaymentId() const
 {
+qCritical() << "QString Wallet::generatePaymentId";
     return QString::fromStdString(Monero::Wallet::genPaymentId());
 }
 
 QString Wallet::integratedAddress(const QString &paymentId) const
 {
+qCritical() << "QString Wallet::integratedAddress";
     return QString::fromStdString(m_walletImpl->integratedAddress(paymentId.toStdString()));
 }
 
 QString Wallet::paymentId() const
 {
+qCritical() << "QString Wallet::paymentId";
     return m_paymentId;
 }
 
 void Wallet::setPaymentId(const QString &paymentId)
 {
+qCritical() << "void Wallet::setPaymentId";
     m_paymentId = paymentId;
 }
 
@@ -646,33 +712,40 @@ QString Wallet::getCacheAttribute(const QString &key) const {
 
 bool Wallet::setCacheAttribute(const QString &key, const QString &val)
 {
+qCritical() << "bool Wallet::setCacheAttribute";
     return m_walletImpl->setCacheAttribute(key.toStdString(), val.toStdString());
 }
 
 bool Wallet::setUserNote(const QString &txid, const QString &note)
 {
+qCritical() << "bool Wallet::setUserNote";
   return m_walletImpl->setUserNote(txid.toStdString(), note.toStdString());
 }
 
 QString Wallet::getUserNote(const QString &txid) const
 {
+qCritical() << "QString Wallet::getUserNote";
   return QString::fromStdString(m_walletImpl->getUserNote(txid.toStdString()));
 }
 
 QString Wallet::getTxKey(const QString &txid) const
 {
+qCritical() << "QString Wallet::getTxKey";
   return QString::fromStdString(m_walletImpl->getTxKey(txid.toStdString()));
 }
 
 void Wallet::getTxKeyAsync(const QString &txid, const QJSValue &callback)
 {
+qCritical() << "void Wallet::getTxKeyAsync";
     m_scheduler.run([this, txid] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         return QJSValueList({txid, getTxKey(txid)});
     }, callback);
 }
 
 QString Wallet::checkTxKey(const QString &txid, const QString &tx_key, const QString &address)
 {
+qCritical() << "QString Wallet::checkTxKey";
     uint64_t received;
     bool in_pool;
     uint64_t confirmations;
@@ -683,6 +756,7 @@ QString Wallet::checkTxKey(const QString &txid, const QString &tx_key, const QSt
 
 QString Wallet::getTxProof(const QString &txid, const QString &address, const QString &message) const
 {
+qCritical() << "QString Wallet::getTxProof";
     std::string result = m_walletImpl->getTxProof(txid.toStdString(), address.toStdString(), message.toStdString());
     if (result.empty())
         result = "error|" + m_walletImpl->errorString();
@@ -691,13 +765,16 @@ QString Wallet::getTxProof(const QString &txid, const QString &address, const QS
 
 void Wallet::getTxProofAsync(const QString &txid, const QString &address, const QString &message, const QJSValue &callback)
 {
+qCritical() << "void Wallet::getTxProofAsync";
     m_scheduler.run([this, txid, address, message] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         return QJSValueList({txid, getTxProof(txid, address, message)});
     }, callback);
 }
 
 QString Wallet::checkTxProof(const QString &txid, const QString &address, const QString &message, const QString &signature)
 {
+qCritical() << "QString Wallet::checkTxProof";
     bool good;
     uint64_t received;
     bool in_pool;
@@ -709,6 +786,7 @@ QString Wallet::checkTxProof(const QString &txid, const QString &address, const 
 
 Q_INVOKABLE QString Wallet::getSpendProof(const QString &txid, const QString &message) const
 {
+qCritical() << "QString Wallet::getSpendProof";
     std::string result = m_walletImpl->getSpendProof(txid.toStdString(), message.toStdString());
     if (result.empty())
         result = "error|" + m_walletImpl->errorString();
@@ -717,13 +795,16 @@ Q_INVOKABLE QString Wallet::getSpendProof(const QString &txid, const QString &me
 
 void Wallet::getSpendProofAsync(const QString &txid, const QString &message, const QJSValue &callback)
 {
+qCritical() << "void Wallet::getSpendProofAsync";
     m_scheduler.run([this, txid, message] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         return QJSValueList({txid, getSpendProof(txid, message)});
     }, callback);
 }
 
 Q_INVOKABLE QString Wallet::checkSpendProof(const QString &txid, const QString &message, const QString &signature) const
 {
+qCritical() << "QString Wallet::checkSpendProof";
     bool good;
     bool success = m_walletImpl->checkSpendProof(txid.toStdString(), message.toStdString(), signature.toStdString(), good);
     std::string result = std::string(success ? "true" : "false") + "|" + std::string(!success ? m_walletImpl->errorString() : good ? "true" : "false");
@@ -732,6 +813,7 @@ Q_INVOKABLE QString Wallet::checkSpendProof(const QString &txid, const QString &
 
 QString Wallet::signMessage(const QString &message, bool filename) const
 {
+qCritical() << "QString Wallet::signMessage";
   if (filename) {
     QFile file(message);
     uchar *data = NULL;
@@ -768,6 +850,7 @@ QString Wallet::signMessage(const QString &message, bool filename) const
 
 bool Wallet::verifySignedMessage(const QString &message, const QString &address, const QString &signature, bool filename) const
 {
+qCritical() << "bool Wallet::verifySignedMessage";
   if (filename) {
     QFile file(message);
     uchar *data = NULL;
@@ -803,6 +886,7 @@ bool Wallet::verifySignedMessage(const QString &message, const QString &address,
 }
 bool Wallet::parse_uri(const QString &uri, QString &address, QString &payment_id, uint64_t &amount, QString &tx_description, QString &recipient_name, QVector<QString> &unknown_parameters, QString &error)
 {
+qCritical() << "bool Wallet::parse_uri";
    std::string s_address, s_payment_id, s_tx_description, s_recipient_name, s_error;
    std::vector<std::string> s_unknown_parameters;
    bool res= m_walletImpl->parse_uri(uri.toStdString(), s_address, s_payment_id, amount, s_tx_description, s_recipient_name, s_unknown_parameters, s_error);
@@ -821,11 +905,13 @@ bool Wallet::parse_uri(const QString &uri, QString &address, QString &payment_id
 
 bool Wallet::rescanSpent()
 {
+qCritical() << "bool Wallet::rescanSpent";
     return m_walletImpl->rescanSpent();
 }
 
 bool Wallet::useForkRules(quint8 required_version, quint64 earlyBlocks) const
 {
+qCritical() << "bool Wallet::useForkRules";
     if(m_connectionStatus == Wallet::ConnectionStatus_Disconnected)
         return false;
     try {
@@ -838,22 +924,26 @@ bool Wallet::useForkRules(quint8 required_version, quint64 earlyBlocks) const
 
 void Wallet::setWalletCreationHeight(quint64 height)
 {
+qCritical() << "void Wallet::setWalletCreationHeight";
     m_walletImpl->setRefreshFromBlockHeight(height);
     emit walletCreationHeightChanged();
 }
 
 QString Wallet::getDaemonLogPath() const
 {
+qCritical() << "QString Wallet::getDaemonLogPath";
     return QString::fromStdString(m_walletImpl->getDefaultDataDir()) + "/bitmonero.log";
 }
 
 bool Wallet::blackballOutput(const QString &amount, const QString &offset)
 {
+qCritical() << "bool Wallet::blackballOutput";
     return m_walletImpl->blackballOutput(amount.toStdString(), offset.toStdString());
 }
 
 bool Wallet::blackballOutputs(const QList<QString> &pubkeys, bool add)
 {
+qCritical() << "bool Wallet::blackballOutputs";
     std::vector<std::string> std_pubkeys;
     foreach (const QString &pubkey, pubkeys) {
         std_pubkeys.push_back(pubkey.toStdString());
@@ -863,6 +953,7 @@ bool Wallet::blackballOutputs(const QList<QString> &pubkeys, bool add)
 
 bool Wallet::blackballOutputs(const QString &filename, bool add)
 {
+qCritical() << "bool Wallet::blackballOutputs";
     QFile file(filename);
 
     try {
@@ -884,11 +975,13 @@ bool Wallet::blackballOutputs(const QString &filename, bool add)
 
 bool Wallet::unblackballOutput(const QString &amount, const QString &offset)
 {
+qCritical() << "bool Wallet::unblackballOutput";
     return m_walletImpl->unblackballOutput(amount.toStdString(), offset.toStdString());
 }
 
 QString Wallet::getRing(const QString &key_image)
 {
+qCritical() << "QString Wallet::getRing";
     std::vector<uint64_t> cring;
     if (!m_walletImpl->getRing(key_image.toStdString(), cring))
         return "";
@@ -906,6 +999,7 @@ QString Wallet::getRing(const QString &key_image)
 
 QString Wallet::getRings(const QString &txid)
 {
+qCritical() << "QString Wallet::getRings";
     std::vector<std::pair<std::string, std::vector<uint64_t>>> crings;
     if (!m_walletImpl->getRings(txid.toStdString(), crings))
         return "";
@@ -928,6 +1022,7 @@ QString Wallet::getRings(const QString &txid)
 
 bool Wallet::setRing(const QString &key_image, const QString &ring, bool relative)
 {
+qCritical() << "bool Wallet::setRing";
     std::vector<uint64_t> cring;
     QStringList strOuts = ring.split(" ");
     foreach(QString str, strOuts)
@@ -943,16 +1038,19 @@ bool Wallet::setRing(const QString &key_image, const QString &ring, bool relativ
 
 void Wallet::segregatePreForkOutputs(bool segregate)
 {
+qCritical() << "void Wallet::segregatePreForkOutputs";
     m_walletImpl->segregatePreForkOutputs(segregate);
 }
 
 void Wallet::segregationHeight(quint64 height)
 {
+qCritical() << "void Wallet::segregationHeight";
     m_walletImpl->segregationHeight(height);
 }
 
 void Wallet::keyReuseMitigation2(bool mitigation)
 {
+qCritical() << "void Wallet::keyReuseMitigation2";
     m_walletImpl->keyReuseMitigation2(mitigation);
 }
 

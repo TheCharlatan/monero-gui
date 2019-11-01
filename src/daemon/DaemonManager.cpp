@@ -136,6 +136,7 @@ bool DaemonManager::start(const QString &flags, NetworkType::Type nettype, const
 
     // Start start watcher
     m_scheduler.run([this, nettype, noSync] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         if (startWatcher(nettype)) {
             emit daemonStarted();
             m_noSync = noSync;
@@ -155,6 +156,7 @@ bool DaemonManager::stop(NetworkType::Type nettype)
 
     // Start stop watcher - Will kill if not shutting down
     m_scheduler.run([this, nettype] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         if (stopWatcher(nettype))
         {
             emit daemonStopped();
@@ -253,6 +255,7 @@ bool DaemonManager::noSync() const noexcept
 void DaemonManager::runningAsync(NetworkType::Type nettype, const QJSValue& callback) const
 { 
     m_scheduler.run([this, nettype] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         return QJSValueList({running(nettype)});
     }, callback);
 }
@@ -282,6 +285,7 @@ bool DaemonManager::sendCommand(const QStringList &cmd, NetworkType::Type nettyp
 void DaemonManager::sendCommandAsync(const QStringList &cmd, NetworkType::Type nettype, const QJSValue& callback) const
 {
     m_scheduler.run([this, cmd, nettype] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         QString message;
         return QJSValueList({sendCommand(cmd, nettype, message)});
     }, callback);

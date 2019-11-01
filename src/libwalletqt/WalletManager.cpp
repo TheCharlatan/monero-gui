@@ -145,7 +145,9 @@ Wallet *WalletManager::openWallet(const QString &path, const QString &password, 
 
 void WalletManager::openWalletAsync(const QString &path, const QString &password, NetworkType::Type nettype, quint64 kdfRounds)
 {
+qCritical() << "void WalletManager::openWalletAsync";
     m_scheduler.run([this, path, password, nettype, kdfRounds] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         emit walletOpened(openWallet(path, password, nettype, kdfRounds));
     });
 }
@@ -209,6 +211,7 @@ void WalletManager::createWalletFromDeviceAsync(const QString &path, const QStri
                                                 const QString &deviceName, quint64 restoreHeight, const QString &subaddressLookahead)
 {
     m_scheduler.run([this, path, password, nettype, deviceName, restoreHeight, subaddressLookahead] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         Wallet *wallet = createWalletFromDevice(path, password, nettype, deviceName, restoreHeight, subaddressLookahead);
         emit walletCreated(wallet);
     });
@@ -216,6 +219,7 @@ void WalletManager::createWalletFromDeviceAsync(const QString &path, const QStri
 
 QString WalletManager::closeWallet()
 {
+qCritical() << "QString WalletManager::closeWallet";
     QMutexLocker locker(&m_mutex);
     QString result;
     if (m_currentWallet) {
@@ -230,18 +234,22 @@ QString WalletManager::closeWallet()
 
 void WalletManager::closeWalletAsync(const QJSValue& callback)
 {
+qCritical() << "void WalletManager::closeWalletAsync";
     m_scheduler.run([this] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         return QJSValueList({closeWallet()});
     }, callback);
 }
 
 bool WalletManager::walletExists(const QString &path) const
 {
+qCritical() << "bool WalletManager::walletExists";
     return m_pimpl->walletExists(path.toStdString());
 }
 
 QStringList WalletManager::findWallets(const QString &path)
 {
+qCritical() << "QStringList WalletManager::findWallets";
     std::vector<std::string> found_wallets = m_pimpl->findWallets(path.toStdString());
     QStringList result;
     for (const auto &w : found_wallets) {
@@ -252,46 +260,55 @@ QStringList WalletManager::findWallets(const QString &path)
 
 QString WalletManager::errorString() const
 {
+qCritical() << "QString WalletManager::errorString";
     return tr("Unknown error");
 }
 
 quint64 WalletManager::maximumAllowedAmount() const
 {
+qCritical() << "quint64 WalletManager::maximumAllowedAmount";
     return Monero::Wallet::maximumAllowedAmount();
 }
 
 QString WalletManager::maximumAllowedAmountAsSting() const
 {
+qCritical() << "QString WalletManager::maximumAllowedAmountAsSting";
     return WalletManager::displayAmount(WalletManager::maximumAllowedAmount());
 }
 
 QString WalletManager::displayAmount(quint64 amount) const
 {
+qCritical() << "QString WalletManager::displayAmount";
     return QString::fromStdString(Monero::Wallet::displayAmount(amount));
 }
 
 quint64 WalletManager::amountFromString(const QString &amount) const
 {
+qCritical() << "quint64 WalletManager::amountFromString";
     return Monero::Wallet::amountFromString(amount.toStdString());
 }
 
 quint64 WalletManager::amountFromDouble(double amount) const
 {
+qCritical() << "quint64 WalletManager::amountFromDouble";
     return Monero::Wallet::amountFromDouble(amount);
 }
 
 bool WalletManager::paymentIdValid(const QString &payment_id) const
 {
+qCritical() << "bool WalletManager::paymentIdValid";
     return Monero::Wallet::paymentIdValid(payment_id.toStdString());
 }
 
 bool WalletManager::addressValid(const QString &address, NetworkType::Type nettype) const
 {
+qCritical() << "bool WalletManager::addressValid";
     return Monero::Wallet::addressValid(address.toStdString(), static_cast<Monero::NetworkType>(nettype));
 }
 
 bool WalletManager::keyValid(const QString &key, const QString &address, bool isViewKey,  NetworkType::Type nettype) const
 {
+qCritical() << "bool WalletManager::keyValid";
     std::string error;
     if(!Monero::Wallet::keyValid(key.toStdString(), address.toStdString(), isViewKey, static_cast<Monero::NetworkType>(nettype), error)){
         qDebug() << QString::fromStdString(error);
@@ -302,43 +319,52 @@ bool WalletManager::keyValid(const QString &key, const QString &address, bool is
 
 QString WalletManager::paymentIdFromAddress(const QString &address, NetworkType::Type nettype) const
 {
+qCritical() << "QString WalletManager::paymentIdFromAddress";
     return QString::fromStdString(Monero::Wallet::paymentIdFromAddress(address.toStdString(), static_cast<Monero::NetworkType>(nettype)));
 }
 
 void WalletManager::setDaemonAddressAsync(const QString &address)
 {
+qCritical() << "void WalletManager::setDaemonAddressAsync";
     m_scheduler.run([this, address] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         m_pimpl->setDaemonAddress(address.toStdString());
     });
 }
 
 bool WalletManager::connected() const
 {
+qCritical() << "bool WalletManager::connected";
     return m_pimpl->connected();
 }
 
 quint64 WalletManager::networkDifficulty() const
 {
+qCritical() << "quint64 WalletManager::networkDifficulty";
     return m_pimpl->networkDifficulty();
 }
 
 quint64 WalletManager::blockchainHeight() const
 {
+qCritical() << "quint64 WalletManager::blockchainHeight";
     return m_pimpl->blockchainHeight();
 }
 
 quint64 WalletManager::blockchainTargetHeight() const
 {
+qCritical() << "quint64 WalletManager::blockchainTargetHeight";
     return m_pimpl->blockchainTargetHeight();
 }
 
 double WalletManager::miningHashRate() const
 {
+qCritical() << "double WalletManager::miningHashRate";
     return m_pimpl->miningHashRate();
 }
 
 bool WalletManager::isMining() const
 {
+qCritical() << "bool WalletManager::isMining";
     {
         QMutexLocker locker(&m_mutex);
         if (m_currentWallet == nullptr || !m_currentWallet->connected())
@@ -352,13 +378,16 @@ bool WalletManager::isMining() const
 
 void WalletManager::miningStatusAsync()
 {
+qCritical() << "void WalletManager::miningStatusAsync";
     m_scheduler.run([this] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         emit miningStatus(isMining());
     });
 }
 
 bool WalletManager::startMining(const QString &address, quint32 threads, bool backgroundMining, bool ignoreBattery)
 {
+qCritical() << "bool WalletManager::startMining";
     if(threads == 0)
         threads = 1;
     return m_pimpl->startMining(address.toStdString(), threads, backgroundMining, ignoreBattery);
@@ -366,21 +395,25 @@ bool WalletManager::startMining(const QString &address, quint32 threads, bool ba
 
 bool WalletManager::stopMining()
 {
+qCritical() << "bool WalletManager::stopMining";
     return m_pimpl->stopMining();
 }
 
 bool WalletManager::localDaemonSynced() const
 {
+qCritical() << "bool WalletManager::localDaemonSynced";
     return blockchainHeight() > 1 && blockchainHeight() >= blockchainTargetHeight();
 }
 
 bool WalletManager::isDaemonLocal(const QString &daemon_address) const
 {
+qCritical() << "bool WalletManager::isDaemonLocal";
     return daemon_address.isEmpty() ? false : Monero::Utils::isAddressLocal(daemon_address.toStdString());
 }
 
 QString WalletManager::resolveOpenAlias(const QString &address) const
 {
+qCritical() << "QString WalletManager::resolveOpenAlias";
     bool dnssec_valid = false;
     std::string res = m_pimpl->resolveOpenAlias(address.toStdString(), dnssec_valid);
     res = std::string(dnssec_valid ? "true" : "false") + "|" + res;
@@ -388,6 +421,7 @@ QString WalletManager::resolveOpenAlias(const QString &address) const
 }
 bool WalletManager::parse_uri(const QString &uri, QString &address, QString &payment_id, uint64_t &amount, QString &tx_description, QString &recipient_name, QVector<QString> &unknown_parameters, QString &error) const
 {
+qCritical() << "bool WalletManager::parse_uri";
     QMutexLocker locker(&m_mutex);
     if (m_currentWallet)
         return m_currentWallet->parse_uri(uri, address, payment_id, amount, tx_description, recipient_name, unknown_parameters, error);
@@ -396,6 +430,7 @@ bool WalletManager::parse_uri(const QString &uri, QString &address, QString &pay
 
 QVariantMap WalletManager::parse_uri_to_object(const QString &uri) const
 {
+qCritical() << "QVariantMap WalletManager::parse_uri_to_object";
     QString address;
     QString payment_id;
     uint64_t amount = 0;
@@ -420,33 +455,38 @@ QVariantMap WalletManager::parse_uri_to_object(const QString &uri) const
 
 void WalletManager::setLogLevel(int logLevel)
 {
+qCritical() << "void WalletManager::setLogLevel";
     Monero::WalletManagerFactory::setLogLevel(logLevel);
 }
 
 void WalletManager::setLogCategories(const QString &categories)
 {
+qCritical() << "void WalletManager::setLogCategories";
     Monero::WalletManagerFactory::setLogCategories(categories.toStdString());
 }
 
 QString WalletManager::urlToLocalPath(const QUrl &url) const
 {
+qCritical() << "QString WalletManager::urlToLocalPath";
     return QDir::toNativeSeparators(url.toLocalFile());
 }
 
 QUrl WalletManager::localPathToUrl(const QString &path) const
 {
+qCritical() << "QUrl WalletManager::localPathToUrl";
     return QUrl::fromLocalFile(path);
 }
 
 #ifndef DISABLE_PASS_STRENGTH_METER
 double WalletManager::getPasswordStrength(const QString &password) const
 {
+qCritical() << "double WalletManager::getPasswordStrength";
     static const char *local_dict[] = {
         "monero", "fluffypony", NULL
     };
 
     if (!ZxcvbnInit("zxcvbn.dict")) {
-        fprintf(stderr, "Failed to open zxcvbn.dict\n");
+        fqCritical() << stderr, "Failed to open zxcvbn.dict";
         return 0.0;
     }
     double e = ZxcvbnMatch(password.toStdString().c_str(), local_dict, NULL);
@@ -457,6 +497,7 @@ double WalletManager::getPasswordStrength(const QString &password) const
 
 bool WalletManager::saveQrCode(const QString &code, const QString &path) const
 {
+qCritical() << "bool WalletManager::saveQrCode";
     QSize size;
     // 240 <=> mainLayout.qrCodeSize (Receive.qml)
     return QRCodeImageProvider::genQrImage(code, &size).scaled(size.expandedTo(QSize(240, 240)), Qt::KeepAspectRatio).save(path, "PNG", 100);
@@ -464,7 +505,9 @@ bool WalletManager::saveQrCode(const QString &code, const QString &path) const
 
 void WalletManager::checkUpdatesAsync(const QString &software, const QString &subdir)
 {
+qCritical() << "void WalletManager::checkUpdatesAsync";
     m_scheduler.run([this, software, subdir] {
+qCritical() << "async " << __FILE__ << ":" << __LINE__;
         emit checkUpdatesComplete(checkUpdates(software, subdir));
     });
 }
@@ -473,6 +516,7 @@ void WalletManager::checkUpdatesAsync(const QString &software, const QString &su
 
 QString WalletManager::checkUpdates(const QString &software, const QString &subdir) const
 {
+qCritical() << "QString WalletManager::checkUpdates";
   qDebug() << "Checking for updates";
   const std::tuple<bool, std::string, std::string, std::string, std::string> result = Monero::WalletManager::checkUpdates(software.toStdString(), subdir.toStdString());
   if (!std::get<0>(result))
@@ -482,6 +526,7 @@ QString WalletManager::checkUpdates(const QString &software, const QString &subd
 
 bool WalletManager::clearWalletCache(const QString &wallet_path) const
 {
+qCritical() << "bool WalletManager::clearWalletCache";
 
     QString fileName = wallet_path;
     // Make sure wallet file is not .keys
@@ -512,6 +557,7 @@ WalletManager::~WalletManager()
 
 void WalletManager::onWalletPassphraseNeeded(Monero::Wallet *)
 {
+qCritical() << "void WalletManager::onWalletPassphraseNeeded";
     m_mutex_pass.lock();
     m_passphrase_abort = false;
     emit this->walletPassphraseNeeded();
@@ -522,6 +568,7 @@ void WalletManager::onWalletPassphraseNeeded(Monero::Wallet *)
 
 void WalletManager::onPassphraseEntered(const QString &passphrase, bool entry_abort)
 {
+qCritical() << "void WalletManager::onPassphraseEntered";
     m_mutex_pass.lock();
     m_passphrase = passphrase;
     m_passphrase_abort = entry_abort;

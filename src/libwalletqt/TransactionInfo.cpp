@@ -34,38 +34,45 @@
 
 TransactionInfo::Direction TransactionInfo::direction() const
 {
+qCritical() << "Direction TransactionInfo::direction";
     return static_cast<Direction>(m_pimpl->direction());
 }
 
 bool TransactionInfo::isPending() const
 {
+qCritical() << "bool TransactionInfo::isPending";
     return m_pimpl->isPending();
 }
 
 bool TransactionInfo::isFailed() const
 {
+qCritical() << "bool TransactionInfo::isFailed";
     return m_pimpl->isFailed();
 }
 
 
 double TransactionInfo::amount() const
 {
+qCritical() << "double TransactionInfo::amount";
     // there's no unsigned uint64 for JS, so better use double
     return WalletManager::instance()->displayAmount(m_pimpl->amount()).toDouble();
 }
 
 quint64 TransactionInfo::atomicAmount() const
 {
+qCritical() << "quint64 TransactionInfo::atomicAmount";
     return m_pimpl->amount();
 }
 
 QString TransactionInfo::displayAmount() const
 {
+qCritical() << "QString TransactionInfo::displayAmount";
     return WalletManager::instance()->displayAmount(m_pimpl->amount());
 }
 
 QString TransactionInfo::fee() const
 {
+qCritical() << "QString TransactionInfo::fee";
     if(m_pimpl->fee() == 0)
         return "";
     return WalletManager::instance()->displayAmount(m_pimpl->fee());
@@ -73,6 +80,7 @@ QString TransactionInfo::fee() const
 
 quint64 TransactionInfo::blockHeight() const
 {
+qCritical() << "quint64 TransactionInfo::blockHeight";
     return m_pimpl->blockHeight();
 }
 
@@ -86,52 +94,62 @@ QSet<quint32> TransactionInfo::subaddrIndex() const
 
 quint32 TransactionInfo::subaddrAccount() const
 {
+qCritical() << "quint32 TransactionInfo::subaddrAccount";
     return m_pimpl->subaddrAccount();
 }
 
 QString TransactionInfo::label() const
 {
+qCritical() << "QString TransactionInfo::label";
     return QString::fromStdString(m_pimpl->label());
 }
 
 quint64 TransactionInfo::confirmations() const
 {
+qCritical() << "quint64 TransactionInfo::confirmations";
     return m_pimpl->confirmations();
 }
 
 quint64 TransactionInfo::unlockTime() const
 {
+qCritical() << "quint64 TransactionInfo::unlockTime";
     return m_pimpl->unlockTime();
 }
 
 QString TransactionInfo::hash() const
 {
+qCritical() << "QString TransactionInfo::hash";
     return QString::fromStdString(m_pimpl->hash());
 }
 
 QDateTime TransactionInfo::timestamp() const
 {
+qCritical() << "QDateTime TransactionInfo::timestamp";
     QDateTime result = QDateTime::fromTime_t(m_pimpl->timestamp());
     return result;
 }
 
 QString TransactionInfo::date() const
 {
+qCritical() << "QString TransactionInfo::date";
     return timestamp().date().toString(Qt::ISODate);
 }
 
 QString TransactionInfo::time() const
 {
+qCritical() << "QString TransactionInfo::time";
     return timestamp().time().toString(Qt::ISODate);
 }
 
 QString TransactionInfo::paymentId() const
 {
+qCritical() << "QString TransactionInfo::paymentId";
     return QString::fromStdString(m_pimpl->paymentId());
 }
 
 QString TransactionInfo::destinations_formatted() const
 {
+qCritical() << "QString TransactionInfo::destinations_formatted";
     QString destinations;
     for (auto const& t: transfers()) {
         if (!destinations.isEmpty())

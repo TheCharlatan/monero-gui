@@ -32,16 +32,19 @@
 
 UnsignedTransaction::Status UnsignedTransaction::status() const
 {
+qCritical() << "Status UnsignedTransaction::status";
     return static_cast<Status>(m_pimpl->status());
 }
 
 QString UnsignedTransaction::errorString() const
 {
+qCritical() << "QString UnsignedTransaction::errorString";
     return QString::fromStdString(m_pimpl->errorString());
 }
 
 quint64 UnsignedTransaction::amount(size_t index) const
 {
+qCritical() << "quint64 UnsignedTransaction::amount";
     std::vector<uint64_t> arr = m_pimpl->amount();
     if(index > arr.size() - 1)
         return 0;
@@ -50,6 +53,7 @@ quint64 UnsignedTransaction::amount(size_t index) const
 
 quint64 UnsignedTransaction::fee(size_t index) const
 {
+qCritical() << "quint64 UnsignedTransaction::fee";
     std::vector<uint64_t> arr = m_pimpl->fee();
     if(index > arr.size() - 1)
         return 0;
@@ -58,6 +62,7 @@ quint64 UnsignedTransaction::fee(size_t index) const
 
 quint64 UnsignedTransaction::mixin(size_t index) const
 {
+qCritical() << "quint64 UnsignedTransaction::mixin";
     std::vector<uint64_t> arr = m_pimpl->mixin();
     if(index > arr.size() - 1)
         return 0;
@@ -66,21 +71,25 @@ quint64 UnsignedTransaction::mixin(size_t index) const
 
 quint64 UnsignedTransaction::txCount() const
 {
+qCritical() << "quint64 UnsignedTransaction::txCount";
     return m_pimpl->txCount();
 }
 
 quint64 UnsignedTransaction::minMixinCount() const
 {
+qCritical() << "quint64 UnsignedTransaction::minMixinCount";
     return m_pimpl->minMixinCount();
 }
 
 QString UnsignedTransaction::confirmationMessage() const
 {
+qCritical() << "QString UnsignedTransaction::confirmationMessage";
     return QString::fromStdString(m_pimpl->confirmationMessage());
 }
 
 QStringList UnsignedTransaction::paymentId() const
 {
+qCritical() << "QStringList UnsignedTransaction::paymentId";
     QList<QString> list;
     for (const auto &t: m_pimpl->paymentId())
         list.append(QString::fromStdString(t));
@@ -89,6 +98,7 @@ QStringList UnsignedTransaction::paymentId() const
 
 QStringList UnsignedTransaction::recipientAddress() const
 {
+qCritical() << "QStringList UnsignedTransaction::recipientAddress";
     QList<QString> list;
     for (const auto &t: m_pimpl->recipientAddress())
         list.append(QString::fromStdString(t));
@@ -97,6 +107,7 @@ QStringList UnsignedTransaction::recipientAddress() const
 
 bool UnsignedTransaction::sign(const QString &fileName) const
 {
+qCritical() << "bool UnsignedTransaction::sign";
     if(!m_pimpl->sign(fileName.toStdString()))
         return false;
     // export key images
@@ -105,6 +116,7 @@ bool UnsignedTransaction::sign(const QString &fileName) const
 
 void UnsignedTransaction::setFilename(const QString &fileName)
 {
+qCritical() << "void UnsignedTransaction::setFilename";
     m_fileName = fileName;
 }
 
