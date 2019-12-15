@@ -16,6 +16,11 @@ else
   deldirs  := $(builddir)/debug $(builddir)/release $(builddir)/fuzz
 endif
 
+all: release-all
+
+depends:
+	cd contrib/depends && $(MAKE) HOST=$(target) && cd ../.. && mkdir -p build/$(target)/release
+	cd build/$(target)/release && cmake -DCMAKE_TOOLCHAIN_FILE=$(CURDIR)/contrib/depends/$(target)/share/toolchain.cmake ../../.. && $(MAKE)
 
 default:
 	mkdir -p build && cd build && cmake -D ARCH="x86-64" -D DEV_MODE=$(or ${DEV_MODE},OFF) -D BUILD_64=ON -D CMAKE_BUILD_TYPE=Release .. && $(MAKE)
