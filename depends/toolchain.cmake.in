@@ -5,12 +5,15 @@ SET(CMAKE_BUILD_TYPE release)
 SET(STATIC true)
 SET(UNBOUND_STATIC true)
 
-# where is the target environment 
+# where is the target environment
 SET(CMAKE_FIND_ROOT_PATH @prefix@ /usr)
 
 SET(ENV{PKG_CONFIG_PATH} @prefix@/lib/pkgconfig)
 
 SET(LRELEASE_PATH @prefix@/native/bin CACHE FILEPATH "path to lrelease" FORCE)
+SET(MOC_PATH @prefix@/native/bin CACHE FILEPATH "path to mock" FORCE)
+SET(UIC_PATH @prefix@/native/bin CACHE FILEPATH "path to uic" FORCE)
+SET(RCC_PATH @prefix@/native/bin CACHE FILEPATH "path to rcc" FORCE)
 
 SET(Readline_ROOT_DIR @prefix@)
 
