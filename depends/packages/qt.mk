@@ -22,6 +22,9 @@ $(package)_qtdeclarative_sha256_hash=b4e47b6038f3c604dee8128aeed12a0e9558a7b2bba
 $(package)_qtxmlpatterns_file_name=qtxmlpatterns-$($(package)_suffix)
 $(package)_qtxmlpatterns_sha256_hash=e4fab0a2d985994b5810af84488d6a6a7b295bd75b8efea982ab1754ddf774fe
 
+$(package)_qtsvg_file_name=qtsvg-$($(package)_suffix)
+$(package)_qtsvg_sha256_hash=c15d0c4ed93b168a6473749dd70cb04b3cc8e8af584447f2701be4cf2f11c5db
+
 $(package)_extra_sources  = $($(package)_qttranslations_file_name)
 $(package)_extra_sources += $($(package)_qttools_file_name)
 $(package)_extra_sources += $($(package)_qtdeclarative_file_name)
@@ -47,7 +50,6 @@ $(package)_config_opts += -no-ico
 $(package)_config_opts += -no-iconv
 $(package)_config_opts += -no-kms
 $(package)_config_opts += -no-linuxfb
-$(package)_config_opts += -no-libjpeg
 $(package)_config_opts += -no-libudev
 $(package)_config_opts += -no-mtdev
 $(package)_config_opts += -no-openvg
@@ -71,6 +73,7 @@ $(package)_config_opts += -optimized-qmake
 $(package)_config_opts += -pch
 $(package)_config_opts += -pkg-config
 $(package)_config_opts += -prefix $(host_prefix)
+$(package)_config_opts += -qt-libjpeg
 $(package)_config_opts += -qt-libpng
 $(package)_config_opts += -qt-pcre
 $(package)_config_opts += -qt-harfbuzz
@@ -144,6 +147,7 @@ $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qttranslat
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qttools_file_name),$($(package)_qttools_file_name),$($(package)_qttools_sha256_hash)) && \
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtdeclarative_file_name),$($(package)_qtdeclarative_file_name),$($(package)_qtdeclarative_sha256_hash)) && \
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtxmlpatterns_file_name),$($(package)_qtxmlpatterns_file_name),$($(package)_qtxmlpatterns_sha256_hash)) && \
+$(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtsvg_file_name),$($(package)_qtsvg_file_name),$($(package)_qtsvg_sha256_hash))
 endef
 
 define $(package)_extract_cmds
@@ -153,6 +157,7 @@ define $(package)_extract_cmds
   echo "$($(package)_qttools_sha256_hash)  $($(package)_source_dir)/$($(package)_qttools_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   echo "$($(package)_qtdeclarative_sha256_hash)  $($(package)_source_dir)/$($(package)_qtdeclarative_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   echo "$($(package)_qtxmlpatterns_sha256_hash)  $($(package)_source_dir)/$($(package)_qtxmlpatterns_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
+  echo "$($(package)_qtsvg_sha256_hash)  $($(package)_source_dir)/$($(package)_qtsvg_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   $(build_SHA256SUM) -c $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   mkdir qtbase && \
   tar --no-same-owner --strip-components=1 -xf $($(package)_source) -C qtbase && \
@@ -164,6 +169,8 @@ define $(package)_extract_cmds
   tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtdeclarative_file_name) -C qtdeclarative && \
   mkdir qtxmlpatterns && \
   tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtxmlpatterns_file_name) -C qtxmlpatterns && \
+  mkdir qtsvg && \
+  tar --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtsvg_file_name) -C qtsvg
 endef
 
 define $(package)_preprocess_cmds
@@ -208,7 +215,8 @@ define $(package)_config_cmds
   cd ../qttranslations && ../qtbase/bin/qmake qttranslations.pro -o Makefile && \
   cd translations && ../../qtbase/bin/qmake translations.pro -o Makefile && cd ../.. && \
   cd qttools/src/linguist/lrelease/ && ../../../../qtbase/bin/qmake lrelease.pro -o Makefile && \
-  cd ../lupdate/ && ../../../../qtbase/bin/qmake lupdate.pro -o Makefile && cd ../../../..
+  cd ../lupdate/ && ../../../../qtbase/bin/qmake lupdate.pro -o Makefile && cd ../../../.. && \
+  cd qtsvg/src && ../../qtbase/bin/qmake -o Makefile && cd ../..
 endef
 
 #cd qtdeclarative && ../qtbase/bin/qmake qtdeclarative.pro -o Makefile && cd .. && \
@@ -219,17 +227,19 @@ define $(package)_build_cmds
   $(MAKE) && \
   $(MAKE) -C ../qttools/src/linguist/lrelease && \
   $(MAKE) -C ../qttools/src/linguist/lupdate && \
+  $(MAKE) -C ../qtsvg/src && \
   $(MAKE) -C ../qttranslations && \
   cd ../qtdeclarative && ../qtbase/bin/qmake qtdeclarative.pro -o Makefile && cd .. && \
   cd qtxmlpatterns && ../qtbase/bin/qmake qtxmlpatterns.pro -o Makefile && cd .. && \
   $(MAKE) -C qtdeclarative && \
-  $(MAKE) -C qtxmlpatterns && \
+  $(MAKE) -C qtxmlpatterns
 endef
 
 define $(package)_stage_cmds
   $(MAKE) INSTALL_ROOT=$($(package)_staging_dir) install && cd .. && \
   $(MAKE) -C qttools/src/linguist/lrelease INSTALL_ROOT=$($(package)_staging_dir) install_target && \
   $(MAKE) -C qttools/src/linguist/lupdate INSTALL_ROOT=$($(package)_staging_dir) install_target && \
+  $(MAKE) -C qtsvg/src INSTALL_ROOT=$($(package)_staging_dir) install &&\
   $(MAKE) -C qtdeclarative INSTALL_ROOT=$($(package)_staging_dir) install && \
   $(MAKE) -C qtxmlpatterns INSTALL_ROOT=$($(package)_staging_dir) install && \
   $(MAKE) -C qttranslations INSTALL_ROOT=$($(package)_staging_dir) install_subtargets && \

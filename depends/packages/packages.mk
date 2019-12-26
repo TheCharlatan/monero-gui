@@ -1,4 +1,4 @@
-packages:=boost openssl zeromq cppzmq expat ldns cppzmq readline libiconv hidapi protobuf libusb zlib expat libxcb xcb_proto libXau xproto freetype fontconfig qt qtquickcontrols2
+packages:=boost openssl zeromq cppzmq expat ldns cppzmq readline libiconv hidapi protobuf libusb zlib expat libxcb xcb_proto libXau xproto freetype fontconfig qt qtquickcontrols2 qtquickcontrols qtmultimedia
 native_packages := native_ccache native_protobuf
 
 darwin_native_packages = native_biplist native_ds_store native_mac_alias
