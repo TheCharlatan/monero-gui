@@ -3,7 +3,7 @@ SET(CMAKE_SYSTEM_NAME @depends@)
 SET(CMAKE_BUILD_TYPE release)
 
 SET(STATIC true)
-SET(UNBOUND_STATIC true)
+#SET(UNBOUND_STATIC true)
 
 # where is the target environment
 SET(CMAKE_FIND_ROOT_PATH @prefix@ /usr)

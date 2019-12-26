@@ -4,10 +4,10 @@ $(package)_download_path=https://download.qt.io/official_releases/qt/5.9/$($(pac
 $(package)_suffix=opensource-src-$($(package)_version).tar.xz
 $(package)_file_name=qtbase-$($(package)_suffix)
 $(package)_sha256_hash=9b9dec1f67df1f94bce2955c5604de992d529dde72050239154c56352da0907d
-$(package)_dependencies=openssl zlib
+$(package)_dependencies=zlib
 $(package)_linux_dependencies=freetype fontconfig libxcb
 $(package)_build_subdir=qtbase
-#$(package)_qt_libs=corelib network widgets gui plugins testlib
+$(package)_qt_libs=corelib network widgets gui plugins testlib
 $(package)_patches=fix_qt_pkgconfig.patch mac-qmake.conf fix_configure_mac.patch fix_no_printer.patch fix_rcc_determinism.patch fix_riscv64_arch.patch xkb-default.patch no-xlib.patch
 
 $(package)_qttranslations_file_name=qttranslations-$($(package)_suffix)
@@ -22,18 +22,10 @@ $(package)_qtdeclarative_sha256_hash=b4e47b6038f3c604dee8128aeed12a0e9558a7b2bba
 $(package)_qtxmlpatterns_file_name=qtxmlpatterns-$($(package)_suffix)
 $(package)_qtxmlpatterns_sha256_hash=e4fab0a2d985994b5810af84488d6a6a7b295bd75b8efea982ab1754ddf774fe
 
-$(package)_qtquickcontrols_file_name=qtquickcontrols-$($(package)_suffix)
-$(package)_qtquickcontrols_sha256_hash=8fba8b190b2f6259cafb9a13d57f1ae9806d871957d65a6af75030cf303ec665
-
-$(package)_qtquickcontrols2_file_name=qtquickcontrols2-$($(package)_suffix)
-$(package)_qtquickcontrols2_sha256_hash=6c1e47188facca82f443e2d3d9692d5a9574db073c37e218b1d89f795b697018
-
 $(package)_extra_sources  = $($(package)_qttranslations_file_name)
 $(package)_extra_sources += $($(package)_qttools_file_name)
 $(package)_extra_sources += $($(package)_qtdeclarative_file_name)
 $(package)_extra_sources += $($(package)_qtxmlpatterns_file_name)
-$(package)_extra_sources += $($(package)_qtquickcontrols_file_name)
-$(package)_extra_sources += $($(package)_qtquickcontrols2_file_name)
 
 define $(package)_set_vars
 $(package)_config_opts_release = -release
@@ -75,7 +67,6 @@ $(package)_config_opts += -no-xinput2
 $(package)_config_opts += -nomake examples
 $(package)_config_opts += -nomake tests
 $(package)_config_opts += -opensource
-$(package)_config_opts += -openssl-linked
 $(package)_config_opts += -optimized-qmake
 $(package)_config_opts += -pch
 $(package)_config_opts += -pkg-config
@@ -153,8 +144,6 @@ $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qttranslat
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qttools_file_name),$($(package)_qttools_file_name),$($(package)_qttools_sha256_hash)) && \
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtdeclarative_file_name),$($(package)_qtdeclarative_file_name),$($(package)_qtdeclarative_sha256_hash)) && \
 $(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtxmlpatterns_file_name),$($(package)_qtxmlpatterns_file_name),$($(package)_qtxmlpatterns_sha256_hash)) && \
-$(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtquickcontrols_file_name),$($(package)_qtquickcontrols_file_name),$($(package)_qtquickcontrols_sha256_hash)) && \
-$(call fetch_file,$(package),$($(package)_download_path),$($(package)_qtquickcontrols2_file_name),$($(package)_qtquickcontrols2_file_name),$($(package)_qtquickcontrols2_sha256_hash))
 endef
 
 define $(package)_extract_cmds
@@ -164,8 +153,6 @@ define $(package)_extract_cmds
   echo "$($(package)_qttools_sha256_hash)  $($(package)_source_dir)/$($(package)_qttools_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   echo "$($(package)_qtdeclarative_sha256_hash)  $($(package)_source_dir)/$($(package)_qtdeclarative_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   echo "$($(package)_qtxmlpatterns_sha256_hash)  $($(package)_source_dir)/$($(package)_qtxmlpatterns_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
-  echo "$($(package)_qtquickcontrols_sha256_hash)  $($(package)_source_dir)/$($(package)_qtquickcontrols_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
-  echo "$($(package)_qtquickcontrols2_sha256_hash)  $($(package)_source_dir)/$($(package)_qtquickcontrols2_file_name)" >> $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   $(build_SHA256SUM) -c $($(package)_extract_dir)/.$($(package)_file_name).hash && \
   mkdir qtbase && \
   tar --no-same-owner --strip-components=1 -xf $($(package)_source) -C qtbase && \
@@ -177,10 +164,6 @@ define $(package)_extract_cmds
   tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtdeclarative_file_name) -C qtdeclarative && \
   mkdir qtxmlpatterns && \
   tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtxmlpatterns_file_name) -C qtxmlpatterns && \
-  mkdir qtquickcontrols && \
-  tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtquickcontrols_file_name) -C qtquickcontrols && \
-  mkdir qtquickcontrols2 && \
-  tar --no-same-owner --strip-components=1 -xf $($(package)_source_dir)/$($(package)_qtquickcontrols2_file_name) -C qtquickcontrols2
 endef
 
 define $(package)_preprocess_cmds
@@ -230,8 +213,6 @@ endef
 
 #cd qtdeclarative && ../qtbase/bin/qmake qtdeclarative.pro -o Makefile && cd .. && \
 #cd qtxmlpatterns && ../qtbase/bin/qmake qtxmlpatterns.pro -o Makefile && cd .. && \
-#cd qtquickcontrols && ../qtbase/bin/qmake qtquickcontrols.pro -o Makefile && cd .. && \
-#cd qtquickcontrols2 && ../qtbase/bin/qmake qtquickcontrols2.pro -o Makefile && cd ..
 
 # $(addprefix sub-,$($(package)_qt_libs)) &&
 define $(package)_build_cmds
@@ -243,10 +224,6 @@ define $(package)_build_cmds
   cd qtxmlpatterns && ../qtbase/bin/qmake qtxmlpatterns.pro -o Makefile && cd .. && \
   $(MAKE) -C qtdeclarative && \
   $(MAKE) -C qtxmlpatterns && \
-  cd qtquickcontrols && ../qtbase/bin/qmake qtquickcontrols.pro -o Makefile && cd .. && \
-  cd qtquickcontrols2 && ../qtbase/bin/qmake qtquickcontrols2.pro -o Makefile && cd .. && \
-  $(MAKE) -C qtquickcontrols && \
-  $(MAKE) -C qtquickcontrols2
 endef
 
 define $(package)_stage_cmds
@@ -255,8 +232,6 @@ define $(package)_stage_cmds
   $(MAKE) -C qttools/src/linguist/lupdate INSTALL_ROOT=$($(package)_staging_dir) install_target && \
   $(MAKE) -C qtdeclarative INSTALL_ROOT=$($(package)_staging_dir) install && \
   $(MAKE) -C qtxmlpatterns INSTALL_ROOT=$($(package)_staging_dir) install && \
-  $(MAKE) -C qtquickcontrols INSTALL_ROOT=$($(package)_staging_dir) install && \
-  $(MAKE) -C qtquickcontrols2 INSTALL_ROOT=$($(package)_staging_dir) install && \
   $(MAKE) -C qttranslations INSTALL_ROOT=$($(package)_staging_dir) install_subtargets && \
   if `test -f qtbase/src/plugins/platforms/xcb/xcb-static/libxcb-static.a`; then \
     cp qtbase/src/plugins/platforms/xcb/xcb-static/libxcb-static.a $($(package)_staging_prefix_dir)/lib; \
