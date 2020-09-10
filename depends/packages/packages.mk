@@ -1,4 +1,4 @@
-packages:=boost openssl zeromq cppzmq expat ldns cppzmq readline libiconv hidapi protobuf libusb zlib expat libxcb xcb_proto libXau xproto freetype fontconfig libxkbcommon libxcb_util libxcb_util_render libxcb_util_keysyms libxcb_util_image libxcb_util_wm qt qtquickcontrols2 qtquickcontrols qtmultimedia
+packages:=boost openssl zeromq cppzmq expat ldns cppzmq readline libiconv hidapi protobuf libusb zlib expat libxcb xcb_proto libXau xproto freetype fontconfig libxkbcommon libxcb_util libxcb_util_render libxcb_util_keysyms libxcb_util_image libxcb_util_wm qt qtquickcontrols2 qtquickcontrols qtmultimedia libgpg-error libgcrypt
 
 native_packages := native_ccache native_protobuf
 
