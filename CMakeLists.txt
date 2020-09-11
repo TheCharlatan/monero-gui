@@ -226,6 +226,7 @@ set(QT5_LIBRARIES
   Qt5Qml
   Qt5Svg
   Qt5Xml
+  Qt5XmlPatterns
 )
 
 if(WITH_SCANNER)

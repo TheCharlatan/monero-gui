@@ -123,7 +123,6 @@ $(package)_config_opts_darwin += -device-option QMAKE_MACOSX_DEPLOYMENT_TARGET=$
 endif
 
 $(package)_config_opts_linux = -xcb
-$(package)_config_opts_linux += -no-xcb-xlib
 $(package)_config_opts_linux += -no-feature-xlib
 $(package)_config_opts_linux += -system-freetype
 $(package)_config_opts_linux += -fontconfig
