@@ -1,8 +1,8 @@
 package=qtmultimedia
-$(package)_version=5.15.0
+$(package)_version=5.15.1
 $(package)_download_path=https://download.qt.io/official_releases/qt/5.15/$($(package)_version)/submodules
 $(package)_file_name=$(package)-everywhere-src-$($(package)_version).tar.xz
-$(package)_sha256_hash=0708d867697f392dd3600c5c1c88f5c61b772a5250a4d059dca67b844af0fbd7
+$(package)_sha256_hash=ed6e75bec9c98559c0fbc91ff746185b1e1845139b2c7a5a843e1e8880697d99
 $(package)_dependencies=qt
 
 define $(package)_config_cmds

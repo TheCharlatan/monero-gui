@@ -1,9 +1,9 @@
 PACKAGE=qt
-$(package)_version=5.15.0
+$(package)_version=5.15.1
 $(package)_download_path=https://download.qt.io/official_releases/qt/5.15/$($(package)_version)/submodules
 $(package)_suffix=everywhere-src-$($(package)_version).tar.xz
 $(package)_file_name=qtbase-$($(package)_suffix)
-$(package)_sha256_hash=9e7af10aece15fa9500369efde69cb220eee8ec3a6818afe01ce1e7d484824c5
+$(package)_sha256_hash=33960404d579675b7210de103ed06a72613bfc4305443e278e2d32a3eb1f3d8c
 $(package)_dependencies=zlib
 $(package)_linux_dependencies=freetype fontconfig libxcb libxkbcommon libxcb_util libxcb_util_render libxcb_util_keysyms libxcb_util_image libxcb_util_wm
 $(package)_build_subdir=qtbase
@@ -11,19 +11,19 @@ $(package)_qt_libs=corelib network widgets gui plugins testlib qlalr xml concurr
 $(package)_patches=fix_qt_pkgconfig.patch mac-qmake.conf fix_configure_mac.patch fix_no_printer.patch fix_rcc_determinism.patch fix_riscv64_arch.patch xkb-default.patch no-xlib.patch
 
 $(package)_qttranslations_file_name=qttranslations-$($(package)_suffix)
-$(package)_qttranslations_sha256_hash=45c43268d9df50784d4d8ca345fce9288a1055fd074ac0ef508097f7aeba22fe
+$(package)_qttranslations_sha256_hash=46e0c0e3a511fbcc803a4146204062e47f6ed43b34d98a3c27372a03b8746bd8
 
 $(package)_qttools_file_name=qttools-$($(package)_suffix)
-$(package)_qttools_sha256_hash=ddbcb49aab3a2e3672582c6e2e7bec0058feff790f67472343c79e2895e0e437
+$(package)_qttools_sha256_hash=c98ee5f0f980bf68cbf0c94d62434816a92441733de50bd9adbe9b9055f03498
 
 $(package)_qtdeclarative_file_name=qtdeclarative-$($(package)_suffix)
-$(package)_qtdeclarative_sha256_hash=9c3c93fb7d340b2f7d738d12408c047318c78973cb45bfc5ff6b3a57e1fef699
+$(package)_qtdeclarative_sha256_hash=7e30f0ccba61f9d71720b91d7f7523c23677f23cd96065cb71df1b0df329d768
 
 $(package)_qtxmlpatterns_file_name=qtxmlpatterns-$($(package)_suffix)
-$(package)_qtxmlpatterns_sha256_hash=2752cf2aa25ebfda89c3736457e27b3d0c7c7ed290dcfd52c209f9f905998507
+$(package)_qtxmlpatterns_sha256_hash=6859d440ce662f3679ce483ebb5a552b619a32517cb1a52a38f967b377857745
 
 $(package)_qtsvg_file_name=qtsvg-$($(package)_suffix)
-$(package)_qtsvg_sha256_hash=ee4d287e2e205ca8c08921b9cbe0fc58bf46be080b5359ad4d7fbdee44aeee0d
+$(package)_qtsvg_sha256_hash=308160223c0bd7492d56fb5d7b7f705bfb130947ac065bf39280ec6d7cbe4f6a
 
 $(package)_extra_sources  = $($(package)_qttranslations_file_name)
 $(package)_extra_sources += $($(package)_qttools_file_name)

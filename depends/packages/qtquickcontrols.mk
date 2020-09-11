@@ -1,8 +1,8 @@
 package=qtquickcontrols
-$(package)_version=5.15.0
+$(package)_version=5.15.1
 $(package)_download_path=https://download.qt.io/official_releases/qt/5.15/$($(package)_version)/submodules
 $(package)_file_name=$(package)-everywhere-src-$($(package)_version).tar.xz
-$(package)_sha256_hash=7072cf4cd27e9f18b36b1c48dec7c79608cf87ba847d3fc3de133f220ec1acee
+$(package)_sha256_hash=0172f88779305aae57f3842538e91361ae9bc5ca2275ee5ce9d455309f0f2c7e
 $(package)_dependencies=qt
 
 define $(package)_config_cmds
